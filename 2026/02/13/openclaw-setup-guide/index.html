@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="前言最近 OpenClaw 火得一塌糊涂，GitHub Star 数一路飙升到 189k+，成为当下最受关注的开源项目之一。 简单来说，OpenClaw 是一个运行在你自己设备上的私人 AI 助手。它不只是能聊天——它能真正动手干活：读写文件、执行命令、控制浏览器、管理日历邮件，7×24 小时不休息。你可以通过 WhatsApp、Telegram、飞书、钉钉、Discord 等聊天工具随时指挥它。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenClaw 搭建指南：从零开始部署你的私人 AI 助手">
+<meta property="og:url" content="https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/index.html">
+<meta property="og:site_name" content="Sanke1999">
+<meta property="og:description" content="前言最近 OpenClaw 火得一塌糊涂，GitHub Star 数一路飙升到 189k+，成为当下最受关注的开源项目之一。 简单来说，OpenClaw 是一个运行在你自己设备上的私人 AI 助手。它不只是能聊天——它能真正动手干活：读写文件、执行命令、控制浏览器、管理日历邮件，7×24 小时不休息。你可以通过 WhatsApp、Telegram、飞书、钉钉、Discord 等聊天工具随时指挥它。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-02-13T02:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-13T02:31:14.983Z">
+<meta property="article:author" content="sanke1999">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="OpenClaw">
+<meta property="article:tag" content="教程">
+<meta property="article:tag" content="自部署">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>OpenClaw 搭建指南：从零开始部署你的私人 AI 助手</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2026/02/12/hello-world/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/&text=OpenClaw 搭建指南：从零开始部署你的私人 AI 助手"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/&title=OpenClaw 搭建指南：从零开始部署你的私人 AI 助手"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/&is_video=false&description=OpenClaw 搭建指南：从零开始部署你的私人 AI 助手"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=OpenClaw 搭建指南：从零开始部署你的私人 AI 助手&body=Check out this article: https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/&title=OpenClaw 搭建指南：从零开始部署你的私人 AI 助手"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/&title=OpenClaw 搭建指南：从零开始部署你的私人 AI 助手"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/&title=OpenClaw 搭建指南：从零开始部署你的私人 AI 助手"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/&title=OpenClaw 搭建指南：从零开始部署你的私人 AI 助手"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/&name=OpenClaw 搭建指南：从零开始部署你的私人 AI 助手&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/&t=OpenClaw 搭建指南：从零开始部署你的私人 AI 助手"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenClaw-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">2.</span> <span class="toc-text">OpenClaw 是什么</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7"><span class="toc-number">2.1.</span> <span class="toc-text">核心特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%A0%E7%BB%9F-AI-vs-OpenClaw"><span class="toc-number">2.2.</span> <span class="toc-text">传统 AI vs OpenClaw</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88%E9%80%89%E6%8B%A9"><span class="toc-number">3.</span> <span class="toc-text">部署方案选择</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E7%A7%8D%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94"><span class="toc-number">3.1.</span> <span class="toc-text">三种方案对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%91%E5%8E%82%E5%95%86%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94"><span class="toc-number">3.2.</span> <span class="toc-text">云厂商方案对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80%EF%BC%9A%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BB%8E%E9%9B%B6%E9%83%A8%E7%BD%B2%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">方式一：云服务器从零部署（推荐）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">4.1.</span> <span class="toc-text">1. 连接服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE-Swap-%E5%86%85%E5%AD%98%EF%BC%882G-%E5%86%85%E5%AD%98%E5%BF%85%E5%81%9A%EF%BC%89"><span class="toc-number">4.2.</span> <span class="toc-text">2. 配置 Swap 内存（2G 内存必做）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AE%89%E8%A3%85-Node-js-22"><span class="toc-number">4.3.</span> <span class="toc-text">3. 安装 Node.js 22+</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%AE%89%E8%A3%85-OpenClaw"><span class="toc-number">4.4.</span> <span class="toc-text">4. 安装 OpenClaw</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%88%9D%E5%A7%8B%E5%8C%96%E9%85%8D%E7%BD%AE"><span class="toc-number">4.5.</span> <span class="toc-text">5. 初始化配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E6%A3%80%E6%9F%A5%E6%9C%8D%E5%8A%A1%E7%8A%B6%E6%80%81"><span class="toc-number">4.6.</span> <span class="toc-text">6. 检查服务状态</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C%EF%BC%9A%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%EF%BC%88macOS-Linux%EF%BC%89"><span class="toc-number">5.</span> <span class="toc-text">方式二：本地部署（macOS&#x2F;Linux）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A5%E5%85%A5%E8%81%8A%E5%A4%A9%E5%B9%B3%E5%8F%B0"><span class="toc-number">6.</span> <span class="toc-text">接入聊天平台</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E5%85%A5-Telegram"><span class="toc-number">6.1.</span> <span class="toc-text">接入 Telegram</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6"><span class="toc-number">6.2.</span> <span class="toc-text">接入飞书</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%8A%80%E8%83%BD%E5%8C%85%EF%BC%88Skills%EF%BC%89"><span class="toc-number">7.</span> <span class="toc-text">安装技能包（Skills）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E5%91%BD%E4%BB%A4%E5%AE%89%E8%A3%85"><span class="toc-number">7.1.</span> <span class="toc-text">通过命令安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87-ClawHub-%E6%B5%8F%E8%A7%88"><span class="toc-number">7.2.</span> <span class="toc-text">通过 ClawHub 浏览</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A9-AI-%E8%87%AA%E5%B7%B1%E8%A3%85"><span class="toc-number">7.3.</span> <span class="toc-text">让 AI 自己装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%94%A8%E7%8E%A9%E6%B3%95"><span class="toc-number">8.</span> <span class="toc-text">实用玩法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-AI-%E8%BF%BD%E7%83%AD%E7%82%B9"><span class="toc-number">8.1.</span> <span class="toc-text">1. AI 追热点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%81%B5%E6%84%9F%E8%AE%B0%E5%BD%95%E5%99%A8"><span class="toc-number">8.2.</span> <span class="toc-text">2. 灵感记录器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%9A%8F%E8%BA%AB%E7%A8%8B%E5%BA%8F%E5%91%98"><span class="toc-number">8.3.</span> <span class="toc-text">3. 随身程序员</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="toc-number">8.4.</span> <span class="toc-text">4. 自动化工作流</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">9.</span> <span class="toc-text">常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%97%B6%E5%86%85%E5%AD%98%E4%B8%8D%E8%B6%B3%EF%BC%88OOM%EF%BC%89"><span class="toc-number">9.1.</span> <span class="toc-text">安装时内存不足（OOM）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#npm-install-%E5%A4%B1%E8%B4%A5"><span class="toc-number">9.2.</span> <span class="toc-text">npm install 失败</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE-Web-UI"><span class="toc-number">9.3.</span> <span class="toc-text">无法访问 Web UI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E8%BF%9E%E6%8E%A5%E5%A4%B1%E8%B4%A5"><span class="toc-number">9.4.</span> <span class="toc-text">模型连接失败</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">10.</span> <span class="toc-text">总结</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        OpenClaw 搭建指南：从零开始部署你的私人 AI 助手
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">sanke1999</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2026-02-13T02:00:00.000Z" class="dt-published" itemprop="datePublished">2026-02-13</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/AI/" rel="tag">AI</a>, <a class="p-category" href="/tags/OpenClaw/" rel="tag">OpenClaw</a>, <a class="p-category" href="/tags/%E6%95%99%E7%A8%8B/" rel="tag">教程</a>, <a class="p-category" href="/tags/%E8%87%AA%E9%83%A8%E7%BD%B2/" rel="tag">自部署</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近 <strong>OpenClaw</strong> 火得一塌糊涂，GitHub Star 数一路飙升到 189k+，成为当下最受关注的开源项目之一。</p>
+<p>简单来说，OpenClaw 是一个运行在你自己设备上的<strong>私人 AI 助手</strong>。它不只是能聊天——它能真正动手干活：读写文件、执行命令、控制浏览器、管理日历邮件，7×24 小时不休息。你可以通过 WhatsApp、Telegram、飞书、钉钉、Discord 等聊天工具随时指挥它。</p>
+<p>本文将手把手带你从零搭建 OpenClaw，涵盖云服务器部署和本地部署两种方式。</p>
+<hr>
+<h2 id="OpenClaw-是什么"><a href="#OpenClaw-是什么" class="headerlink" title="OpenClaw 是什么"></a>OpenClaw 是什么</h2><p>OpenClaw（原名 Clawdbot → Moltbot → OpenClaw）由 PSPDFKit 创始人 Peter Steinberger 发布，是一个开源的本地优先 AI 智能体框架。</p>
+<h3 id="核心特性"><a href="#核心特性" class="headerlink" title="核心特性"></a>核心特性</h3><ul>
+<li><strong>本地优先</strong>：所有数据在本地处理，隐私完全可控</li>
+<li><strong>系统级执行能力</strong>：能读写文件、执行 Shell 命令、控制浏览器、调用 API</li>
+<li><strong>多平台接入</strong>：支持 WhatsApp、Telegram、Slack、Discord、飞书、钉钉、企业微信、iMessage 等</li>
+<li><strong>持久记忆</strong>：记住你的偏好和上下文，跨会话连贯工作</li>
+<li><strong>7×24h 在线</strong>：支持定时任务、主动提醒、后台监控</li>
+</ul>
+<h3 id="传统-AI-vs-OpenClaw"><a href="#传统-AI-vs-OpenClaw" class="headerlink" title="传统 AI vs OpenClaw"></a>传统 AI vs OpenClaw</h3><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>传统 AI</th>
+<th>OpenClaw</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>收件箱满了</td>
+<td>“建议你清理一下邮件”</td>
+<td>直接打开邮箱，分类删除垃圾邮件</td>
+</tr>
+<tr>
+<td>想订机票</td>
+<td>“推荐你上携程看看”</td>
+<td>打开浏览器，搜索航班，完成预订</td>
+</tr>
+<tr>
+<td>代码部署</td>
+<td>“你可以运行 git push”</td>
+<td>自动执行 git 提交、推送、创建 PR</td>
+</tr>
+<tr>
+<td>数据分析</td>
+<td>“建议用 Python 处理”</td>
+<td>编写并执行脚本，输出分析结果</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="部署方案选择"><a href="#部署方案选择" class="headerlink" title="部署方案选择"></a>部署方案选择</h2><h3 id="三种方案对比"><a href="#三种方案对比" class="headerlink" title="三种方案对比"></a>三种方案对比</h3><table>
+<thead>
+<tr>
+<th>对比维度</th>
+<th>本地部署</th>
+<th>Mac Mini</th>
+<th>云服务器</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>成本</td>
+<td>免费</td>
+<td>中等（一次性）</td>
+<td>较低（按年）</td>
+</tr>
+<tr>
+<td>在线时长</td>
+<td>随电脑开关</td>
+<td>7×24h</td>
+<td>7×24h</td>
+</tr>
+<tr>
+<td>公网访问</td>
+<td>需内网穿透</td>
+<td>需内网穿透</td>
+<td>✅ 独立公网 IP</td>
+</tr>
+<tr>
+<td>稳定性</td>
+<td>一般</td>
+<td>极高</td>
+<td>高</td>
+</tr>
+<tr>
+<td>推荐度</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+</tr>
+</tbody></table>
+<p><strong>快速选择</strong>：</p>
+<ul>
+<li>想先试试 → 本地部署</li>
+<li>有闲置 Mac Mini → Mac Mini 方案</li>
+<li>需要稳定在线 → <strong>云服务器（推荐）</strong></li>
+</ul>
+<h3 id="云厂商方案对比"><a href="#云厂商方案对比" class="headerlink" title="云厂商方案对比"></a>云厂商方案对比</h3><table>
+<thead>
+<tr>
+<th>厂商</th>
+<th>价格</th>
+<th>配置</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>阿里云</td>
+<td>68 元&#x2F;年</td>
+<td>2核2G&#x2F;200M&#x2F;40G</td>
+<td>性价比最高，支持海外</td>
+</tr>
+<tr>
+<td>腾讯云</td>
+<td>99 元&#x2F;年</td>
+<td>2核2G&#x2F;50M&#x2F;50G</td>
+<td>IM 接入最全</td>
+</tr>
+<tr>
+<td>百度云</td>
+<td>0.01 元&#x2F;首月</td>
+<td>2核4G&#x2F;5M&#x2F;200G</td>
+<td>零成本尝鲜</td>
+</tr>
+<tr>
+<td>AWS</td>
+<td>半年免费+100$</td>
+<td>2核2G</td>
+<td>可定制性强，海外原生</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="方式一：云服务器从零部署（推荐）"><a href="#方式一：云服务器从零部署（推荐）" class="headerlink" title="方式一：云服务器从零部署（推荐）"></a>方式一：云服务器从零部署（推荐）</h2><p>以一台 Linux 云服务器为例，完整演示部署过程。</p>
+<h3 id="1-连接服务器"><a href="#1-连接服务器" class="headerlink" title="1. 连接服务器"></a>1. 连接服务器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改密钥权限</span></span><br><span class="line"><span class="built_in">chmod</span> 600 ~/Downloads/your-key.pem</span><br><span class="line"></span><br><span class="line"><span class="comment"># SSH 连接</span></span><br><span class="line">ssh -i ~/Downloads/your-key.pem root@你的服务器公网IP</span><br></pre></td></tr></table></figure>
+
+<p>建议配置 SSH 快捷方式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 编辑 ~/.ssh/config</span></span><br><span class="line">Host openclaw</span><br><span class="line">    HostName &lt;服务器公网IP&gt;</span><br><span class="line">    User root</span><br><span class="line">    IdentityFile ~/Downloads/your-key.pem</span><br><span class="line">    StrictHostKeyChecking no</span><br><span class="line"></span><br><span class="line"><span class="comment"># 之后直接用</span></span><br><span class="line">ssh openclaw</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-配置-Swap-内存（2G-内存必做）"><a href="#2-配置-Swap-内存（2G-内存必做）" class="headerlink" title="2. 配置 Swap 内存（2G 内存必做）"></a>2. 配置 Swap 内存（2G 内存必做）</h3><p>2GB 内存直接装 OpenClaw 可能 OOM，建议配置 4G Swap：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建 Swap</span></span><br><span class="line">fallocate -l 4G ~/swapfile</span><br><span class="line"><span class="built_in">chmod</span> 600 ~/swapfile</span><br><span class="line"><span class="built_in">sudo</span> mkswap ~/swapfile</span><br><span class="line"></span><br><span class="line"><span class="comment"># 永久挂载</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$HOME</span>/swapfile none swap sw 0 0&quot;</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/fstab</span><br><span class="line"></span><br><span class="line"><span class="comment"># 激活</span></span><br><span class="line"><span class="built_in">sudo</span> swapon --all</span><br><span class="line"></span><br><span class="line"><span class="comment"># 验证</span></span><br><span class="line">free -h</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-安装-Node-js-22"><a href="#3-安装-Node-js-22" class="headerlink" title="3. 安装 Node.js 22+"></a>3. 安装 Node.js 22+</h3><p>OpenClaw 要求 Node.js 22 以上：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装 nvm</span></span><br><span class="line">curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash</span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 Node.js</span></span><br><span class="line">nvm install node</span><br><span class="line"></span><br><span class="line"><span class="comment"># 验证</span></span><br><span class="line">node --version  <span class="comment"># 应该是 v22.x.x</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-安装-OpenClaw"><a href="#4-安装-OpenClaw" class="headerlink" title="4. 安装 OpenClaw"></a>4. 安装 OpenClaw</h3><p><strong>方式 A：一键脚本（推荐）</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -fsSL https://openclaw.ai/install.sh | bash</span><br></pre></td></tr></table></figure>
+
+<p><strong>方式 B：npm 安装</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g openclaw@latest</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-初始化配置"><a href="#5-初始化配置" class="headerlink" title="5. 初始化配置"></a>5. 初始化配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openclaw onboard --install-daemon</span><br></pre></td></tr></table></figure>
+
+<p>按提示操作：</p>
+<ol>
+<li><strong>安全确认</strong>：选择 <code>Yes</code></li>
+<li><strong>Onboarding mode</strong>：选择 <code>QuickStart</code></li>
+<li><strong>Model provider</strong>：选择你的模型提供商（推荐 Anthropic 或 Qwen）</li>
+<li><strong>Channel</strong>：可以先 <code>Skip for now</code>，后续再配置</li>
+<li><strong>Skills</strong>：可以先跳过</li>
+<li><strong>启动方式</strong>：选择 <code>Hatch in TUI</code></li>
+</ol>
+<p>看到 TUI 聊天界面就说明安装成功了，输入 <code>Hello</code> 测试一下。</p>
+<h3 id="6-检查服务状态"><a href="#6-检查服务状态" class="headerlink" title="6. 检查服务状态"></a>6. 检查服务状态</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openclaw status</span><br></pre></td></tr></table></figure>
+
+<p>看到 <code>Gateway service: running</code> 就说明一切正常。</p>
+<hr>
+<h2 id="方式二：本地部署（macOS-Linux）"><a href="#方式二：本地部署（macOS-Linux）" class="headerlink" title="方式二：本地部署（macOS&#x2F;Linux）"></a>方式二：本地部署（macOS&#x2F;Linux）</h2><p>如果你只是想体验一下，本地部署最简单：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 确保 Node.js &gt;= 22</span></span><br><span class="line">node --version</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 安装 OpenClaw</span></span><br><span class="line">npm install -g openclaw@latest</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 初始化</span></span><br><span class="line">openclaw onboard --install-daemon</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 启动</span></span><br><span class="line">openclaw gateway start</span><br></pre></td></tr></table></figure>
+
+<p>macOS 用户还可以使用菜单栏 App，体验更好。</p>
+<hr>
+<h2 id="接入聊天平台"><a href="#接入聊天平台" class="headerlink" title="接入聊天平台"></a>接入聊天平台</h2><p>OpenClaw 支持接入多种聊天平台，这里以 Telegram 和飞书为例。</p>
+<h3 id="接入-Telegram"><a href="#接入-Telegram" class="headerlink" title="接入 Telegram"></a>接入 Telegram</h3><ol>
+<li>在 Telegram 找 <code>@BotFather</code>，创建一个新 Bot，获取 Bot Token</li>
+<li>找 <code>@getidsbot</code> 获取你的 Telegram 数字 ID</li>
+<li>运行配置：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openclaw configure</span><br></pre></td></tr></table></figure>
+
+<p>选择 Telegram，填入 Bot Token 和 Owner ID 即可。</p>
+<h3 id="接入飞书"><a href="#接入飞书" class="headerlink" title="接入飞书"></a>接入飞书</h3><ol>
+<li>在<a target="_blank" rel="noopener" href="https://open.feishu.cn/">飞书开放平台</a>创建应用，启用”机器人”能力</li>
+<li>开通 <code>im:message</code> 等消息权限</li>
+<li>事件订阅选择<strong>长连接</strong>模式（无需公网域名）</li>
+<li>获取 App ID 和 App Secret</li>
+<li>在 OpenClaw 中配置：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">openclaw configure</span><br><span class="line"><span class="comment"># 选择 Feishu/Lark，填入 App ID 和 App Secret</span></span><br></pre></td></tr></table></figure>
+
+<p>配置完成后，就可以在飞书里和你的 AI 助手对话了。</p>
+<hr>
+<h2 id="安装技能包（Skills）"><a href="#安装技能包（Skills）" class="headerlink" title="安装技能包（Skills）"></a>安装技能包（Skills）</h2><p>Skills 是 OpenClaw 的扩展能力，相当于给 AI 装插件。</p>
+<h3 id="通过命令安装"><a href="#通过命令安装" class="headerlink" title="通过命令安装"></a>通过命令安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx clawhub@latest install &lt;skill名称&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="通过-ClawHub-浏览"><a href="#通过-ClawHub-浏览" class="headerlink" title="通过 ClawHub 浏览"></a>通过 ClawHub 浏览</h3><p>访问 <a target="_blank" rel="noopener" href="https://clawhub.ai/skills">clawhub.ai</a> 浏览可用技能，包括：</p>
+<ul>
+<li>百度搜索</li>
+<li>AI 绘本生成</li>
+<li>智能 PPT 生成</li>
+<li>编程动画制作</li>
+<li>更多社区技能…</li>
+</ul>
+<h3 id="让-AI-自己装"><a href="#让-AI-自己装" class="headerlink" title="让 AI 自己装"></a>让 AI 自己装</h3><p>最酷的方式——直接跟 OpenClaw 说：</p>
+<blockquote>
+<p>“帮我安装百度搜索技能”</p>
+</blockquote>
+<p>它会自己操作服务器完成安装。让 AI 给自己装技能，这才是 AI 时代该有的操作。</p>
+<hr>
+<h2 id="实用玩法"><a href="#实用玩法" class="headerlink" title="实用玩法"></a>实用玩法</h2><h3 id="1-AI-追热点"><a href="#1-AI-追热点" class="headerlink" title="1. AI 追热点"></a>1. AI 追热点</h3><blockquote>
+<p>“帮我获取今天 AI 相关的资讯热点”</p>
+</blockquote>
+<p>还可以设置定时任务，每天早上自动推送。</p>
+<h3 id="2-灵感记录器"><a href="#2-灵感记录器" class="headerlink" title="2. 灵感记录器"></a>2. 灵感记录器</h3><p>把 OpenClaw 当超级备忘录，随时在手机上说一句就行。它不只帮你记，还会自动分类整理。</p>
+<h3 id="3-随身程序员"><a href="#3-随身程序员" class="headerlink" title="3. 随身程序员"></a>3. 随身程序员</h3><p>在手机上发条消息：</p>
+<blockquote>
+<p>“帮我写一个图片批量压缩的网页工具，写完直接部署到服务器上”</p>
+</blockquote>
+<p>几分钟后，一个能用的在线工具就出来了。</p>
+<h3 id="4-自动化工作流"><a href="#4-自动化工作流" class="headerlink" title="4. 自动化工作流"></a>4. 自动化工作流</h3><ul>
+<li>定时检查服务器状态</li>
+<li>监控邮件并自动分类</li>
+<li>自动回复群消息</li>
+<li>定时生成日报&#x2F;周报</li>
+</ul>
+<hr>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="安装时内存不足（OOM）"><a href="#安装时内存不足（OOM）" class="headerlink" title="安装时内存不足（OOM）"></a>安装时内存不足（OOM）</h3><p>配置更大的 Swap，或升级到 4G 内存的服务器。</p>
+<h3 id="npm-install-失败"><a href="#npm-install-失败" class="headerlink" title="npm install 失败"></a>npm install 失败</h3><p>国内服务器可能需要配置镜像源：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config <span class="built_in">set</span> registry https://registry.npmmirror.com</span><br></pre></td></tr></table></figure>
+
+<h3 id="无法访问-Web-UI"><a href="#无法访问-Web-UI" class="headerlink" title="无法访问 Web UI"></a>无法访问 Web UI</h3><p>确保防火墙放通了 18789 端口：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 云服务器安全组放通 18789</span></span><br><span class="line"><span class="comment"># 或者用 SSH 隧道</span></span><br><span class="line">ssh -N -L 18789:127.0.0.1:18789 openclaw</span><br></pre></td></tr></table></figure>
+
+<p>然后本地访问 <code>http://localhost:18789</code>。</p>
+<h3 id="模型连接失败"><a href="#模型连接失败" class="headerlink" title="模型连接失败"></a>模型连接失败</h3><p>运行诊断：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openclaw doctor</span><br></pre></td></tr></table></figure>
+
+<p>检查 API Key 是否正确，网络是否通畅。</p>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>OpenClaw 把 AI 助手的门槛拉到了地板上。几分钟搭建，一条消息指挥，7×24 小时在线。</p>
+<p>不管你是开发者、学生还是普通上班族，都值得试试。毕竟，谁不想有个不休息、不抱怨、随叫随到的 AI 打工人呢？</p>
+<p><strong>相关链接</strong>：</p>
+<ul>
+<li>GitHub：<a target="_blank" rel="noopener" href="https://github.com/openclaw/openclaw">github.com&#x2F;openclaw&#x2F;openclaw</a></li>
+<li>官网：<a target="_blank" rel="noopener" href="https://openclaw.ai/">openclaw.ai</a></li>
+<li>文档：<a target="_blank" rel="noopener" href="https://docs.openclaw.ai/">docs.openclaw.ai</a></li>
+<li>技能商店：<a target="_blank" rel="noopener" href="https://clawhub.ai/">clawhub.ai</a></li>
+<li>官方 Discord：<a target="_blank" rel="noopener" href="https://discord.gg/clawd">discord.gg&#x2F;clawd</a></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/probberechts">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenClaw-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">2.</span> <span class="toc-text">OpenClaw 是什么</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7"><span class="toc-number">2.1.</span> <span class="toc-text">核心特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%A0%E7%BB%9F-AI-vs-OpenClaw"><span class="toc-number">2.2.</span> <span class="toc-text">传统 AI vs OpenClaw</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88%E9%80%89%E6%8B%A9"><span class="toc-number">3.</span> <span class="toc-text">部署方案选择</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E7%A7%8D%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94"><span class="toc-number">3.1.</span> <span class="toc-text">三种方案对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%91%E5%8E%82%E5%95%86%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94"><span class="toc-number">3.2.</span> <span class="toc-text">云厂商方案对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80%EF%BC%9A%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BB%8E%E9%9B%B6%E9%83%A8%E7%BD%B2%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">方式一：云服务器从零部署（推荐）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">4.1.</span> <span class="toc-text">1. 连接服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE-Swap-%E5%86%85%E5%AD%98%EF%BC%882G-%E5%86%85%E5%AD%98%E5%BF%85%E5%81%9A%EF%BC%89"><span class="toc-number">4.2.</span> <span class="toc-text">2. 配置 Swap 内存（2G 内存必做）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AE%89%E8%A3%85-Node-js-22"><span class="toc-number">4.3.</span> <span class="toc-text">3. 安装 Node.js 22+</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%AE%89%E8%A3%85-OpenClaw"><span class="toc-number">4.4.</span> <span class="toc-text">4. 安装 OpenClaw</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%88%9D%E5%A7%8B%E5%8C%96%E9%85%8D%E7%BD%AE"><span class="toc-number">4.5.</span> <span class="toc-text">5. 初始化配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E6%A3%80%E6%9F%A5%E6%9C%8D%E5%8A%A1%E7%8A%B6%E6%80%81"><span class="toc-number">4.6.</span> <span class="toc-text">6. 检查服务状态</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C%EF%BC%9A%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%EF%BC%88macOS-Linux%EF%BC%89"><span class="toc-number">5.</span> <span class="toc-text">方式二：本地部署（macOS&#x2F;Linux）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A5%E5%85%A5%E8%81%8A%E5%A4%A9%E5%B9%B3%E5%8F%B0"><span class="toc-number">6.</span> <span class="toc-text">接入聊天平台</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E5%85%A5-Telegram"><span class="toc-number">6.1.</span> <span class="toc-text">接入 Telegram</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E5%85%A5%E9%A3%9E%E4%B9%A6"><span class="toc-number">6.2.</span> <span class="toc-text">接入飞书</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%8A%80%E8%83%BD%E5%8C%85%EF%BC%88Skills%EF%BC%89"><span class="toc-number">7.</span> <span class="toc-text">安装技能包（Skills）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E5%91%BD%E4%BB%A4%E5%AE%89%E8%A3%85"><span class="toc-number">7.1.</span> <span class="toc-text">通过命令安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87-ClawHub-%E6%B5%8F%E8%A7%88"><span class="toc-number">7.2.</span> <span class="toc-text">通过 ClawHub 浏览</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A9-AI-%E8%87%AA%E5%B7%B1%E8%A3%85"><span class="toc-number">7.3.</span> <span class="toc-text">让 AI 自己装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%94%A8%E7%8E%A9%E6%B3%95"><span class="toc-number">8.</span> <span class="toc-text">实用玩法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-AI-%E8%BF%BD%E7%83%AD%E7%82%B9"><span class="toc-number">8.1.</span> <span class="toc-text">1. AI 追热点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%81%B5%E6%84%9F%E8%AE%B0%E5%BD%95%E5%99%A8"><span class="toc-number">8.2.</span> <span class="toc-text">2. 灵感记录器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%9A%8F%E8%BA%AB%E7%A8%8B%E5%BA%8F%E5%91%98"><span class="toc-number">8.3.</span> <span class="toc-text">3. 随身程序员</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="toc-number">8.4.</span> <span class="toc-text">4. 自动化工作流</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">9.</span> <span class="toc-text">常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%97%B6%E5%86%85%E5%AD%98%E4%B8%8D%E8%B6%B3%EF%BC%88OOM%EF%BC%89"><span class="toc-number">9.1.</span> <span class="toc-text">安装时内存不足（OOM）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#npm-install-%E5%A4%B1%E8%B4%A5"><span class="toc-number">9.2.</span> <span class="toc-text">npm install 失败</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E6%B3%95%E8%AE%BF%E9%97%AE-Web-UI"><span class="toc-number">9.3.</span> <span class="toc-text">无法访问 Web UI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E8%BF%9E%E6%8E%A5%E5%A4%B1%E8%B4%A5"><span class="toc-number">9.4.</span> <span class="toc-text">模型连接失败</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">10.</span> <span class="toc-text">总结</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/&text=OpenClaw 搭建指南：从零开始部署你的私人 AI 助手"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/&title=OpenClaw 搭建指南：从零开始部署你的私人 AI 助手"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/&is_video=false&description=OpenClaw 搭建指南：从零开始部署你的私人 AI 助手"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=OpenClaw 搭建指南：从零开始部署你的私人 AI 助手&body=Check out this article: https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/&title=OpenClaw 搭建指南：从零开始部署你的私人 AI 助手"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/&title=OpenClaw 搭建指南：从零开始部署你的私人 AI 助手"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/&title=OpenClaw 搭建指南：从零开始部署你的私人 AI 助手"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/&title=OpenClaw 搭建指南：从零开始部署你的私人 AI 助手"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/&name=OpenClaw 搭建指南：从零开始部署你的私人 AI 助手&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sanke1999.github.io/2026/02/13/openclaw-setup-guide/&t=OpenClaw 搭建指南：从零开始部署你的私人 AI 助手"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    sanke1999
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
